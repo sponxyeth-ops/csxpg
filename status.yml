@@ -1,0 +1,34 @@
+name: Discord Server Status
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # every 5 minutes (GitHub's minimum interval)
+  workflow_dispatch:          # lets you run it manually from the Actions tab
+
+# Avoid overlapping runs editing the same message
+concurrency:
+  group: server-status
+  cancel-in-progress: true
+
+jobs:
+  update-status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm install
+
+      - name: Update Discord status message
+        run: node status.mjs
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          MESSAGE_ID:  ${{ vars.MESSAGE_ID }}
+          SERVER_HOST: ${{ vars.SERVER_HOST }}
+          SERVER_PORT: ${{ vars.SERVER_PORT }}
+          GAME_TYPE:   ${{ vars.GAME_TYPE }}
+          LOGO_URL:    ${{ vars.LOGO_URL }}
+          SERVER_NAME: ${{ vars.SERVER_NAME }}
