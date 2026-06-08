@@ -1,0 +1,13 @@
+{
+  "name": "discord-server-status",
+  "version": "1.0.0",
+  "description": "Free GitHub Actions bot that posts CS server stats to Discord via webhook",
+  "type": "module",
+  "main": "status.mjs",
+  "scripts": {
+    "start": "node status.mjs"
+  },
+  "dependencies": {
+    "gamedig": "^5.1.4"
+  }
+}
