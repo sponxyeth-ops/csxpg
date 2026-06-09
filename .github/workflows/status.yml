@@ -25,7 +25,7 @@ jobs:
       - name: Update Discord status message
         run: node status.mjs
         env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL || vars.WEBHOOK_URL }}
           MESSAGE_ID:  ${{ vars.MESSAGE_ID }}
           SERVER_HOST: ${{ vars.SERVER_HOST }}
           SERVER_PORT: ${{ vars.SERVER_PORT }}
