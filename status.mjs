@@ -8,7 +8,7 @@ const PORT        = Number(process.env.SERVER_PORT || 27015);
 const LOGO_URL    = process.env.LOGO_URL || '';
 const SERVER_NAME = process.env.SERVER_NAME || 'XPlayZM.CSBlackDevil.COM';
 const CONNECT_URL = process.env.CONNECT_URL || '';
-const STEAM_ICON  = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/240px-Steam_icon_logo.svg.png';
+const STEAM_ICON  = 'https://logo.clearbit.com/steampowered.com';
 
 const CANDIDATES = [...new Set([
   process.env.GAME_TYPE, 'counterstrike16', 'cs16', 'goldsrc', 'cscz',
@@ -65,9 +65,8 @@ function buildEmbed(state) {
   const max = state.maxplayers ?? '?';
   const realPlayers = allPlayers.filter(isReal)
     .sort((a, b) => (b.raw?.score ?? b.score ?? 0) - (a.raw?.score ?? a.score ?? 0));
-  const connectValue = CONNECT_URL
-    ? `**[🎮 CLICK TO CONNECT](${CONNECT_URL})**\n\`connect ${HOST}:${PORT}\``
-    : `steam://connect/${HOST}:${PORT}\n\`connect ${HOST}:${PORT}\``;
+  const connectTarget = CONNECT_URL || `steam://connect/${HOST}:${PORT}`;
+  const connectValue = `**[🎮 CONNECT WITH STEAM](${connectTarget})**\n\`connect ${HOST}:${PORT}\``;
   return {
     author: { name: 'Counter-Strike 1.6 · Click to join', icon_url: STEAM_ICON },
     title: `🟢 ${state.name || SERVER_NAME}`,
@@ -76,7 +75,6 @@ function buildEmbed(state) {
     fields: [
       { name: '👥 Players', value: `**${realPlayers.length}/${max}**`, inline: true },
       { name: '🗺️ Map', value: `\`${state.map || 'unknown'}\``, inline: true },
-      { name: '📶 Ping', value: `${state.ping ?? '?'} ms`, inline: true },
       { name: '🔌 Connect', value: connectValue, inline: false },
       { name: '📋 Scoreboard', value: buildScoreboard(realPlayers), inline: false },
     ],
